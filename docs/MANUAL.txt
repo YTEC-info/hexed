@@ -1,0 +1,85 @@
+hexed - Hexadecimal File Editor
+
+https://apps.venomdev.net/hexed/hexed-help/
+
+  v?.?.?
+
+Usage:
+  hexed [options] [file]
+
+Options:
+  -?                            Shows this help screen
+  -c [src] [dest] [len]         Copy data from src to dest for len words
+  -co [src] [dest] [len]        Copy data from src overwriting dest for len
+                                words
+  -d [src] [len]                Display data from src for len words
+  -e [dest] [...]               Enter hex values [...] at dest
+  -i [dest] [cnt] [...]         Insert hex values [...] at dest repeating cnt
+                                times. Defaults to 0 for empty hex values.
+  -m [src] [dest] [len]         Move data from src to dest for len words
+  -mo [src] [dest] [len]        Move data from src overwriting dest for len
+                                words
+  -r [src] [len]                Remove data from src for len words
+  -w [bytes]                    Set the word size in bytes: 1 = 8 bits
+                                2 = 16 bits, 4 = 32 bits, 8 = 64 bits
+
+- Remove: -r [src] [len]
+Removes a number of bytes from the file starting at the source.
+hexed -r 10 100 file
+
+Removes 0x100 bytes from the file at 0x10 to 0x110.
+
+- Move: -m [src] [dest] [len]
+Moves data from the source to the destination
+hexed -m 100 200 20 file
+
+Will move 32 bytes from 0x100 to 0x200 and move everything from 0x120 to 0x220 down by 32 bytes.
+
+- Move Overwrite: -mo [src] [dest] [len]
+Moves the data from the source to the destination writing over the original data at the destination
+hexed -mo 100 200 20 file
+
+This will move 32 bytes from 0x100 to 0x200 but will insert zeroes into the file below the destination. This way the data will appear where you expect it to be after the move.
+
+- Insert: -i [dest] [cnt] ...
+Inserts bytes in the file at the destination, repeating the bytes for a number of times.
+hexed -i 100 10 01 02 03 file
+
+This will insert the bytes 0x01 0x02 0x03 at 0x100 for 0x10 (16) times. For an empty value this command will insert 0 for count times.
+
+- Enter: -e [dest] ...
+Enter adds new values to a file, overwriting any values that were already at the address:
+hexed -e 100 10 20 30 40 file
+
+Enters the values 0x10, 0x20, 0x30 and 0x40 starting at 0x100. If a file name is set then the values will be automatically saved to the file.
+
+
+- Dump: -d [src] [len]
+The dump command displays a range of values and their ascii symbols starting at the source (default 0) up to length (default end of the file):
+hexed -d 0 100 file
+
+Displays values starting from 0 for 0x100 (256) bytes.
+
+-Copy: -c [src] [dest] [len]
+Copies data from the source inserting it at the destination
+hexed -c 100 200 20 file
+
+This will copy 32 bytes from 0x100 to 0x200 moving everything at 0x200 up by 32 bytes.
+
+- Copy Overwrite: -co [src] [dest] [len]
+Copies data from the source overwriting the destination
+hexed -co 100 200 20 file
+
+Copy 32 bytes from 0x100 to 0x200 overwriting the original data.
+
+- Word size: -w [bytes]
+Sets the data word size for most commands like dump, enter, insert etc. Valid values are 1 = 8 bit, 2 = 16 bit, 4 = 32 bit and 8 = 64 bit.
+hexed -w 2
+
+This will set the word size to 16 bit so when used with a command like dump will display the data as 2 bytes long as in this example:
+hexed -w 2 -e 18 ffff abcd 1234 dead -d
+
+00000000  0000 0000 0000 0000  0000 0000 0000 0000  ................
+
+00000010  0000 0000 0000 0000  ffff abcd 1234 dead  ............4...
+

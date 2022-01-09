@@ -6,4 +6,8 @@
 
 Feel free to collaborate as improvements!
 
+[<h3>Wiki<h3>](https://github.com/YTEC-info/hexed/wiki)
+
 Creator: [Venomdev -  B.ZaaR](https://apps.venomdev.net/hexed/)
+
+
